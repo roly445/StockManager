@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using StockManager.Web.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace StockManager.Web.Controllers
 {
@@ -12,7 +6,7 @@ namespace StockManager.Web.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return this.View();
         }
     }
 }
