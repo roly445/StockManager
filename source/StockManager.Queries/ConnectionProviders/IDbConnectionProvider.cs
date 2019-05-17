@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace StockManager.Queries
+namespace StockManager.Queries.ConnectionProviders
 {
     public interface IDbConnectionProvider
     {

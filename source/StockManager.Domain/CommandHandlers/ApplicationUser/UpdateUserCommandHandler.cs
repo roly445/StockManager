@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -9,24 +7,35 @@ using StockManager.Core;
 using StockManager.Core.Constants;
 using StockManager.Domain.AggregatesModel.ApplicationUserAggregate;
 using StockManager.Domain.Commands.ApplicationUser;
+using StockManager.Queries.Contracts;
 
 namespace StockManager.Domain.CommandHandlers.ApplicationUser
 {
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, ResultWithError<ErrorData>>
     {
         private readonly IApplicationUserRepository _applicationUserRepository;
+        private readonly IIdentityQueries _identityQueries;
 
-        public UpdateUserCommandHandler(IApplicationUserRepository applicationUserRepository)
+        public UpdateUserCommandHandler(IApplicationUserRepository applicationUserRepository, IIdentityQueries identityQueries)
         {
-            this._applicationUserRepository = applicationUserRepository ?? throw new ArgumentNullException(nameof(applicationUserRepository));
+            this._applicationUserRepository = applicationUserRepository ??
+                                              throw new ArgumentNullException(nameof(applicationUserRepository));
+            this._identityQueries = identityQueries ?? throw new ArgumentNullException(nameof(identityQueries));
         }
 
-        public async Task<ResultWithError<ErrorData>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        public async Task<ResultWithError<ErrorData>> Handle(
+            UpdateUserCommand request, CancellationToken cancellationToken)
         {
             var userMaybe = await this._applicationUserRepository.FindById(request.Id, cancellationToken);
             if (userMaybe.HasNoValue)
             {
                 return ResultWithError.Fail(new ErrorData(ErrorCodes.UserDoesNotExist));
+            }
+
+            var userCheck = await this._identityQueries.GetUserByNormalizedUserName(request.NormalizedUserName);
+            if (userCheck.HasValue && userCheck.Value.Id != request.Id)
+            {
+                return ResultWithError.Fail(new ErrorData(ErrorCodes.UserAlreadyExists));
             }
 
             var user = userMaybe.Value;

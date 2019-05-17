@@ -13,6 +13,10 @@ namespace StockManager.Domain.AggregatesModel.ApplicationUserAggregate
             this.PasswordHash = passwordHash;
         }
 
+        private ApplicationUser()
+        {
+        }
+
         public string UserName { get; private set; }
 
         public string NormalizedUserName { get; private set; }

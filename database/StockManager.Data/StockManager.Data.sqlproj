@@ -59,9 +59,12 @@
     <Folder Include="Identity" />
     <Folder Include="Security" />
     <Folder Include="Identity\Tables" />
+    <Folder Include="Identity\Stored Procedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\Identity.sql" />
     <Build Include="Identity\Tables\ApplicationUser.sql" />
+    <Build Include="Identity\Stored Procedures\uspGetUserById.sql" />
+    <Build Include="Identity\Stored Procedures\uspGetUserByNormalizedUserName.sql" />
   </ItemGroup>
 </Project>

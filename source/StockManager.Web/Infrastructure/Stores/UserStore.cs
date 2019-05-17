@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using StockManager.Domain.Commands.ApplicationUser;
 using StockManager.Queries;
+using StockManager.Queries.Contracts;
 
 namespace StockManager.Web.Infrastructure.Stores
 {
@@ -13,13 +14,13 @@ namespace StockManager.Web.Infrastructure.Stores
         IUserPasswordStore<AppUser>
     {
         private readonly IMediator _mediator;
-        private readonly IStockManagerQueries _stockManagerQueries;
+        private readonly IIdentityQueries _identityQueries;
 
-        public UserStore(IMediator mediator, IStockManagerQueries stockManagerQueries)
+        public UserStore(IMediator mediator, IIdentityQueries identityQueries)
         {
             this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            this._stockManagerQueries =
-                stockManagerQueries ?? throw new ArgumentNullException(nameof(stockManagerQueries));
+            this._identityQueries =
+                identityQueries ?? throw new ArgumentNullException(nameof(identityQueries));
         }
 
         public Task SetPasswordHashAsync(AppUser user, string passwordHash, CancellationToken cancellationToken)
@@ -108,7 +109,7 @@ namespace StockManager.Web.Infrastructure.Stores
 
         public async Task<AppUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            var userMaybe = await this._stockManagerQueries.GetUserById(Guid.Parse(userId));
+            var userMaybe = await this._identityQueries.GetUserById(Guid.Parse(userId));
             if (userMaybe.HasNoValue)
             {
                 return null;
@@ -120,7 +121,7 @@ namespace StockManager.Web.Infrastructure.Stores
 
         public async Task<AppUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var userMaybe = await this._stockManagerQueries.GetUserByNormalizedUserName(normalizedUserName);
+            var userMaybe = await this._identityQueries.GetUserByNormalizedUserName(normalizedUserName);
             if (userMaybe.HasNoValue)
             {
                 return null;

@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using MaybeMonad;
 using StockManager.Queries.Models;
 
-namespace StockManager.Queries
+namespace StockManager.Queries.Contracts
 {
-    public interface IStockManagerQueries
+    public interface IIdentityQueries
     {
         Task<Maybe<UserModel>> GetUserById(Guid userId);
 

@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
-namespace StockManager.Queries
+namespace StockManager.Queries.ConnectionProviders
 {
     public class SqlConnectionProvider : IDbConnectionProvider
     {

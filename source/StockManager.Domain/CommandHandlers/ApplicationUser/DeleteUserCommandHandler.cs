@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -18,10 +16,12 @@ namespace StockManager.Domain.CommandHandlers.ApplicationUser
 
         public DeleteUserCommandHandler(IApplicationUserRepository applicationUserRepository)
         {
-            this._applicationUserRepository = applicationUserRepository ?? throw new ArgumentNullException(nameof(applicationUserRepository));
+            this._applicationUserRepository = applicationUserRepository ??
+                                              throw new ArgumentNullException(nameof(applicationUserRepository));
         }
 
-        public async Task<ResultWithError<ErrorData>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        public async Task<ResultWithError<ErrorData>> Handle(
+            DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var userMaybe = await this._applicationUserRepository.FindById(request.UserId, cancellationToken);
             if (userMaybe.HasNoValue)

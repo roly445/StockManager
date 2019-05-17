@@ -8,7 +8,7 @@ using StockManager.Core.Constants;
 using StockManager.Domain.AggregatesModel.ApplicationUserAggregate;
 using StockManager.Domain.CommandResults.ApplicationUser;
 using StockManager.Domain.Commands.ApplicationUser;
-using StockManager.Queries;
+using StockManager.Queries.Contracts;
 
 namespace StockManager.Domain.CommandHandlers.ApplicationUser
 {
@@ -16,19 +16,19 @@ namespace StockManager.Domain.CommandHandlers.ApplicationUser
         CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Result<CreateUserCommandResult, ErrorData>>
     {
         private readonly IApplicationUserRepository _applicationUserRepository;
-        private readonly IStockManagerQueries _stockManagerQueries;
+        private readonly IIdentityQueries _identityQueries;
 
-        public CreateUserCommandHandler(IApplicationUserRepository applicationUserRepository, IStockManagerQueries stockManagerQueries)
+        public CreateUserCommandHandler(IApplicationUserRepository applicationUserRepository, IIdentityQueries identityQueries)
         {
-            this._applicationUserRepository = applicationUserRepository;
-            this._stockManagerQueries = stockManagerQueries;
+            this._applicationUserRepository = applicationUserRepository ?? throw new ArgumentNullException(nameof(applicationUserRepository));
+            this._identityQueries = identityQueries ?? throw new ArgumentNullException(nameof(identityQueries));
         }
 
         public async Task<Result<CreateUserCommandResult, ErrorData>> Handle(
             CreateUserCommand request,
             CancellationToken cancellationToken)
         {
-            var userMaybe = await this._stockManagerQueries.GetUserByNormalizedUserName(request.NormalizedUserName);
+            var userMaybe = await this._identityQueries.GetUserByNormalizedUserName(request.NormalizedUserName);
             if (userMaybe.HasValue)
             {
                 return Result.Fail<CreateUserCommandResult, ErrorData>(

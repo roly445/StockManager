@@ -4,16 +4,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using MaybeMonad;
+using StockManager.Queries.ConnectionProviders;
+using StockManager.Queries.Contracts;
 using StockManager.Queries.Models;
 using StockManager.Queries.TransferObjects;
 
 namespace StockManager.Queries
 {
-    public sealed class StockManagerQueries : IStockManagerQueries
+    public sealed class IdentityQueries : IIdentityQueries
     {
         private readonly IDbConnectionProvider _dbConnectionProvider;
 
-        public StockManagerQueries(IDbConnectionProvider dbConnectionProvider)
+        public IdentityQueries(IDbConnectionProvider dbConnectionProvider)
         {
             this._dbConnectionProvider =
                 dbConnectionProvider ?? throw new ArgumentNullException(nameof(dbConnectionProvider));
