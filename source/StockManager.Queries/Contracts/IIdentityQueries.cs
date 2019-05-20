@@ -10,5 +10,7 @@ namespace StockManager.Queries.Contracts
         Task<Maybe<UserModel>> GetUserById(Guid userId);
 
         Task<Maybe<UserModel>> GetUserByNormalizedUserName(string normalizedUserName);
+        Task<StatusCheckModel> CheckForPresenceOfUserByNormalizedUserName(string normalizedUserName);
+        Task<StatusCheckModel> CheckForPresenceOfUserByNormalizedUserNameAndId(string normalizedUserName, Guid userId);
     }
 }

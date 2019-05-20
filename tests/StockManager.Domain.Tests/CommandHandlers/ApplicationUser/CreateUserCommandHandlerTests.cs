@@ -22,8 +22,8 @@ namespace StockManager.Domain.Tests.CommandHandlers.ApplicationUser
         {
             var applicationUserRepository = new Mock<IApplicationUserRepository>();
             var identityQueries = new Mock<IIdentityQueries>();
-            identityQueries.Setup(x => x.GetUserByNormalizedUserName(It.IsAny<string>())).ReturnsAsync(() =>
-                Maybe.From(new UserModel(Guid.NewGuid(), "Emile-A239", "emile-a239", "some-hash")));
+            identityQueries.Setup(x => x.CheckForPresenceOfUserByNormalizedUserName(It.IsAny<string>())).ReturnsAsync(() =>
+                new StatusCheckModel(true));
             var createUserCommandHandler =
                 new CreateUserCommandHandler(applicationUserRepository.Object, identityQueries.Object);
 
@@ -42,8 +42,8 @@ namespace StockManager.Domain.Tests.CommandHandlers.ApplicationUser
 
             applicationUserRepository.Setup(x => x.UnitOfWork).Returns(unitOfWork.Object);
             var identityQueries = new Mock<IIdentityQueries>();
-            identityQueries.Setup(x => x.GetUserByNormalizedUserName(It.IsAny<string>())).ReturnsAsync(() =>
-                Maybe<UserModel>.Nothing);
+            identityQueries.Setup(x => x.CheckForPresenceOfUserByNormalizedUserName(It.IsAny<string>())).ReturnsAsync(() =>
+                new StatusCheckModel(false));
             var createUserCommandHandler =
                 new CreateUserCommandHandler(applicationUserRepository.Object, identityQueries.Object);
 
@@ -62,8 +62,8 @@ namespace StockManager.Domain.Tests.CommandHandlers.ApplicationUser
 
             applicationUserRepository.Setup(x => x.UnitOfWork).Returns(unitOfWork.Object);
             var identityQueries = new Mock<IIdentityQueries>();
-            identityQueries.Setup(x => x.GetUserByNormalizedUserName(It.IsAny<string>())).ReturnsAsync(() =>
-                Maybe<UserModel>.Nothing);
+            identityQueries.Setup(x => x.CheckForPresenceOfUserByNormalizedUserName(It.IsAny<string>())).ReturnsAsync(() =>
+                new StatusCheckModel(false));
             var createUserCommandHandler =
                 new CreateUserCommandHandler(applicationUserRepository.Object, identityQueries.Object);
 

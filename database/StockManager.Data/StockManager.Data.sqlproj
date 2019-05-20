@@ -60,11 +60,23 @@
     <Folder Include="Security" />
     <Folder Include="Identity\Tables" />
     <Folder Include="Identity\Stored Procedures" />
+    <Folder Include="Stock" />
+    <Folder Include="Stock\Tables" />
+    <Folder Include="Stock\Stored Procedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\Identity.sql" />
     <Build Include="Identity\Tables\ApplicationUser.sql" />
     <Build Include="Identity\Stored Procedures\uspGetUserById.sql" />
     <Build Include="Identity\Stored Procedures\uspGetUserByNormalizedUserName.sql" />
+    <Build Include="Security\Stock.sql" />
+    <Build Include="Stock\Tables\Batch.sql" />
+    <Build Include="Stock\Tables\Stock.sql" />
+    <Build Include="Stock\Tables\Category.sql" />
+    <Build Include="Stock\Tables\Type.sql" />
+    <Build Include="Identity\Stored Procedures\uspCheckForPresenceOfUserByNormalizedUserName.sql" />
+    <Build Include="Identity\Stored Procedures\uspCheckForPresenceOfUserByNormalizedUserNameAndId.sql" />
+    <Build Include="Stock\Stored Procedures\uspCheckForPresenceOfCategoryByName.sql" />
+    <Build Include="Stock\Stored Procedures\uspCheckForPresenceOfTypeByCategoryAndName.sql" />
   </ItemGroup>
 </Project>

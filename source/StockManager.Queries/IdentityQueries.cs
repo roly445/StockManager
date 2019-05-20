@@ -60,5 +60,33 @@ namespace StockManager.Queries
                 return Maybe.From(new UserModel(obj.Id, obj.UserName, obj.NormalizedUserName, obj.PasswordHash));
             }
         }
+
+        public async Task<StatusCheckModel> CheckForPresenceOfUserByNormalizedUserName(string normalizedUserName)
+        {
+            using (var dbConnection = this._dbConnectionProvider.Connection)
+            {
+                dbConnection.Open();
+
+                var res = await dbConnection.QueryAsync<PresenceCheckDto<Guid>>(
+                    "identity.uspCheckForPresenceOfUserByNormalizedUserName",
+                    new {normalizedUserName}, commandType: CommandType.StoredProcedure);
+                var dtos = res as PresenceCheckDto<Guid>[] ?? res.ToArray();
+                return new StatusCheckModel(dtos.Length > 0);
+            }
+        }
+
+        public async Task<StatusCheckModel> CheckForPresenceOfUserByNormalizedUserNameAndId(string normalizedUserName, Guid userId)
+        {
+            using (var dbConnection = this._dbConnectionProvider.Connection)
+            {
+                dbConnection.Open();
+
+                var res = await dbConnection.QueryAsync<PresenceCheckDto<Guid>>(
+                    "identity.uspCheckForPresenceOfUserByNormalizedUserNameAndId",
+                    new {userId, normalizedUserName}, commandType: CommandType.StoredProcedure);
+                var dtos = res as PresenceCheckDto<Guid>[] ?? res.ToArray();
+                return new StatusCheckModel(dtos.Length > 0);
+            }
+        }
     }
 }

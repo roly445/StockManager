@@ -28,8 +28,8 @@ namespace StockManager.Domain.CommandHandlers.ApplicationUser
             CreateUserCommand request,
             CancellationToken cancellationToken)
         {
-            var userMaybe = await this._identityQueries.GetUserByNormalizedUserName(request.NormalizedUserName);
-            if (userMaybe.HasValue)
+            var presenceCheck = await this._identityQueries.CheckForPresenceOfUserByNormalizedUserName(request.NormalizedUserName);
+            if (presenceCheck.IsPresent)
             {
                 return Result.Fail<CreateUserCommandResult, ErrorData>(
                     new ErrorData(ErrorCodes.UserAlreadyExists));

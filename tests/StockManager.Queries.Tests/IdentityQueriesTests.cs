@@ -92,5 +92,63 @@ namespace StockManager.Queries.Tests
             var userMaybe = await stockManagerQueries.GetUserByNormalizedUserName(string.Empty);
             Assert.True(userMaybe.HasNoValue);
         }
+
+        [Fact]
+        public async Task CheckForPresenceOfUserByNormalizedUserName_UserIsInStore_ShouldReturnTrue()
+        {
+            var connection = new Mock<IDbConnection>();
+            connection.SetupDapperAsync(c => c.QueryAsync<PresenceCheckDto<Guid>>(It.IsAny<string>(), null, null, null, null))
+                .ReturnsAsync(() => new List<PresenceCheckDto<Guid>>
+                {
+                    new PresenceCheckDto<Guid>(),
+                });
+            var dbConnectionProvider = new Mock<IDbConnectionProvider>();
+            dbConnectionProvider.SetupGet(x => x.Connection).Returns(connection.Object);
+            var stockManagerQueries = new IdentityQueries(dbConnectionProvider.Object);
+            var presence = await stockManagerQueries.CheckForPresenceOfUserByNormalizedUserName(string.Empty);
+            Assert.True(presence.IsPresent);
+        }
+
+        [Fact]
+        public async Task CheckForPresenceOfUserByNormalizedUserName_UserIsNotStore_ShouldReturnFalse()
+        {
+            var connection = new Mock<IDbConnection>();
+            connection.SetupDapperAsync(c => c.QueryAsync<PresenceCheckDto<Guid>>(It.IsAny<string>(), null, null, null, null))
+                .ReturnsAsync(() => new List<PresenceCheckDto<Guid>>());
+            var dbConnectionProvider = new Mock<IDbConnectionProvider>();
+            dbConnectionProvider.SetupGet(x => x.Connection).Returns(connection.Object);
+            var stockManagerQueries = new IdentityQueries(dbConnectionProvider.Object);
+            var presence = await stockManagerQueries.CheckForPresenceOfUserByNormalizedUserName(string.Empty);
+            Assert.False(presence.IsPresent);
+        }
+
+        [Fact]
+        public async Task CheckForPresenceOfUserByNormalizedUserNameAndId_UserIsInStore_ShouldReturnTrue()
+        {
+            var connection = new Mock<IDbConnection>();
+            connection.SetupDapperAsync(c => c.QueryAsync<PresenceCheckDto<Guid>>(It.IsAny<string>(), null, null, null, null))
+                .ReturnsAsync(() => new List<PresenceCheckDto<Guid>>
+                {
+                    new PresenceCheckDto<Guid>(),
+                });
+            var dbConnectionProvider = new Mock<IDbConnectionProvider>();
+            dbConnectionProvider.SetupGet(x => x.Connection).Returns(connection.Object);
+            var stockManagerQueries = new IdentityQueries(dbConnectionProvider.Object);
+            var presence = await stockManagerQueries.CheckForPresenceOfUserByNormalizedUserNameAndId(string.Empty, Guid.NewGuid());
+            Assert.True(presence.IsPresent);
+        }
+
+        [Fact]
+        public async Task CheckForPresenceOfUserByNormalizedUserNameAndId_UserIsNotStore_ShouldReturnFalse()
+        {
+            var connection = new Mock<IDbConnection>();
+            connection.SetupDapperAsync(c => c.QueryAsync<PresenceCheckDto<Guid>>(It.IsAny<string>(), null, null, null, null))
+                .ReturnsAsync(() => new List<PresenceCheckDto<Guid>>());
+            var dbConnectionProvider = new Mock<IDbConnectionProvider>();
+            dbConnectionProvider.SetupGet(x => x.Connection).Returns(connection.Object);
+            var stockManagerQueries = new IdentityQueries(dbConnectionProvider.Object);
+            var presence = await stockManagerQueries.CheckForPresenceOfUserByNormalizedUserNameAndId(string.Empty, Guid.NewGuid());
+            Assert.False(presence.IsPresent);
+        }
     }
 }

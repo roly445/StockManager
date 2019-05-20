@@ -32,8 +32,8 @@ namespace StockManager.Domain.CommandHandlers.ApplicationUser
                 return ResultWithError.Fail(new ErrorData(ErrorCodes.UserDoesNotExist));
             }
 
-            var userCheck = await this._identityQueries.GetUserByNormalizedUserName(request.NormalizedUserName);
-            if (userCheck.HasValue && userCheck.Value.Id != request.Id)
+            var presenceCheck = await this._identityQueries.CheckForPresenceOfUserByNormalizedUserNameAndId(request.NormalizedUserName, request.Id);
+            if (presenceCheck.IsPresent)
             {
                 return ResultWithError.Fail(new ErrorData(ErrorCodes.UserAlreadyExists));
             }
